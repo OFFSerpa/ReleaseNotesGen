@@ -1,0 +1,93 @@
+//
+//  GitHubService.swift
+//  ReleaseNotesGen
+//
+//  Created by Vinicius Pansan on 22/05/2026.
+//
+
+import Foundation
+
+enum GitHubError: LocalizedError {
+    case invalidURL
+    case invalidToken
+    case networkError(Error)
+    case decodingError(Error)
+    case apiError(Int, String)
+    case invalidRepository
+
+    var errorDescription: String? {
+        switch self {
+        case .invalidURL: return "Invalid URL"
+        case .invalidToken: return "Invalid or expired token"
+        case .networkError(let e): return "Network error: \(e.localizedDescription)"
+        case .decodingError(let e): return "Decoding error: \(e.localizedDescription)"
+        case .apiError(let code, let msg): return "API error \(code): \(msg)"
+        case .invalidRepository: return "Repository not found or access denied"
+        }
+    }
+}
+
+final class GitHubService {
+    private let baseURL = "https://api.github.com"
+    private let token: String
+
+    init(token: String) {
+        self.token = token
+    }
+
+    private func makeRequest(url: URL) -> URLRequest {
+        var request = URLRequest(url: url)
+        request.setValue("token \(token)", forHTTPHeaderField: "Authorization")
+        request.setValue("application/vnd.github.v3+json", forHTTPHeaderField: "Accept")
+        return request
+    }
+
+    func validateToken() async throws -> Bool {
+        guard let url = URL(string: "\(baseURL)/user") else { throw GitHubError.invalidURL }
+        let (_, response) = try await URLSession.shared.data(for: makeRequest(url: url))
+        guard let http = response as? HTTPURLResponse else { return false }
+        if http.statusCode == 401 { throw GitHubError.invalidToken }
+        return http.statusCode == 200
+    }
+
+    func fetchTags(owner: String, repo: String) async throws -> [Tag] {
+        guard let url = URL(string: "\(baseURL)/repos/\(owner)/\(repo)/tags?per_page=100") else {
+            throw GitHubError.invalidURL
+        }
+        let (data, response) = try await URLSession.shared.data(for: makeRequest(url: url))
+        guard let http = response as? HTTPURLResponse else { throw GitHubError.invalidURL }
+        switch http.statusCode {
+        case 200:
+            do { return try JSONDecoder().decode([Tag].self, from: data) }
+            catch { throw GitHubError.decodingError(error) }
+        case 401: throw GitHubError.invalidToken
+        case 404: throw GitHubError.invalidRepository
+        default:
+            let msg = String(data: data, encoding: .utf8) ?? "Unknown error"
+            throw GitHubError.apiError(http.statusCode, msg)
+        }
+    }
+
+    func compareCommits(owner: String, repo: String, base: String, head: String) async throws -> [Commit] {
+        let path = "\(baseURL)/repos/\(owner)/\(repo)/compare/\(base)...\(head)?per_page=250"
+        guard let url = URL(string: path) else { throw GitHubError.invalidURL }
+        let (data, response) = try await URLSession.shared.data(for: makeRequest(url: url))
+        guard let http = response as? HTTPURLResponse else { throw GitHubError.invalidURL }
+        switch http.statusCode {
+        case 200:
+            do {
+                let compareResponse = try JSONDecoder().decode(CompareResponse.self, from: data)
+                return compareResponse.commits
+            } catch { throw GitHubError.decodingError(error) }
+        case 401: throw GitHubError.invalidToken
+        case 404: throw GitHubError.invalidRepository
+        default:
+            let msg = String(data: data, encoding: .utf8) ?? "Unknown error"
+            throw GitHubError.apiError(http.statusCode, msg)
+        }
+    }
+}
+
+private struct CompareResponse: Codable {
+    let commits: [Commit]
+}
