@@ -21,6 +21,7 @@
 		000000020000000000000012 /* ReleaseNoteResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000010000000000000012 /* ReleaseNoteResultView.swift */; };
 		000000020000000000000013 /* CommitParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000010000000000000013 /* CommitParser.swift */; };
 		000000020000000000000014 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 000000010000000000000014 /* Assets.xcassets */; };
+		000000020000000000000015 /* MarkdownPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000010000000000000015 /* MarkdownPreviewView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,6 +40,7 @@
 		000000010000000000000012 /* ReleaseNoteResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReleaseNoteResultView.swift; sourceTree = "<group>"; };
 		000000010000000000000013 /* CommitParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommitParser.swift; sourceTree = "<group>"; };
 		000000010000000000000014 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		000000010000000000000015 /* MarkdownPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownPreviewView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,6 +127,7 @@
 				000000010000000000000010 /* SetupView.swift */,
 				000000010000000000000011 /* MainView.swift */,
 				000000010000000000000012 /* ReleaseNoteResultView.swift */,
+				000000010000000000000015 /* MarkdownPreviewView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -206,6 +209,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				000000020000000000000015 /* MarkdownPreviewView.swift in Sources */,
 				000000020000000000000001 /* ReleaseNotesGenApp.swift in Sources */,
 				000000020000000000000002 /* Repository.swift in Sources */,
 				000000020000000000000003 /* Tag.swift in Sources */,

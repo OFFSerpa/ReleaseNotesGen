@@ -9,9 +9,15 @@ import SwiftUI
 import AppKit
 import UniformTypeIdentifiers
 
+private enum OutputTab: String, CaseIterable {
+    case raw = "Raw"
+    case preview = "Preview"
+}
+
 struct MainView: View {
     @StateObject private var viewModel = ReleaseNoteViewModel()
     @ObservedObject var setupViewModel: SetupViewModel
+    @State private var outputTab: OutputTab = .raw
 
     var body: some View {
         VStack(spacing: 0) {
@@ -52,7 +58,8 @@ struct MainView: View {
             } else if let error = viewModel.errorMessage {
                 errorView(error)
             } else if let markdown = viewModel.generatedMarkdown {
-                ReleaseNoteResultView(markdown: markdown)
+                outputToggle
+                outputContent(markdown: markdown)
                 actionButtons(markdown: markdown)
             } else {
                 emptyState
@@ -97,6 +104,34 @@ struct MainView: View {
         }
         .buttonStyle(.borderedProminent)
         .disabled(viewModel.isGenerating || viewModel.fromTag == nil || viewModel.toTag == nil)
+    }
+
+    private var outputToggle: some View {
+        HStack {
+            Picker("", selection: $outputTab) {
+                ForEach(OutputTab.allCases, id: \.self) { tab in
+                    Text(tab.rawValue).tag(tab)
+                }
+            }
+            .pickerStyle(.segmented)
+            .frame(width: 160)
+            Spacer()
+        }
+    }
+
+    @ViewBuilder
+    private func outputContent(markdown: String) -> some View {
+        if outputTab == .raw {
+            ReleaseNoteResultView(markdown: markdown)
+        } else {
+            MarkdownPreviewView(markdown: markdown)
+                .background(Color(NSColor.textBackgroundColor))
+                .cornerRadius(8)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(Color(NSColor.separatorColor), lineWidth: 1)
+                )
+        }
     }
 
     private func actionButtons(markdown: String) -> some View {
@@ -147,4 +182,8 @@ struct MainView: View {
             try? text.write(to: url, atomically: true, encoding: .utf8)
         }
     }
+}
+
+#Preview {
+    MainView(setupViewModel: .init())
 }
