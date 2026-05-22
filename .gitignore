@@ -8,7 +8,6 @@ xcuserdata/
 *.xcuserstate
 *.xccheckout
 *.moved-aside
-DerivedData/
 *.hmap
 *.ipa
 *.dSYM.zip
@@ -16,9 +15,26 @@ DerivedData/
 
 # Build
 build/
+DerivedData/
 *.o
 *.d
 
-# SPM
+# Swift Package Manager
 .build/
 .swiftpm/
+
+# Playgrounds
+timeline.xctimeline
+playground.xcworkspace
+
+# CocoaPods
+Pods/
+
+# Carthage
+Carthage/Build/
+
+# fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/**/*.png
+fastlane/test_output
