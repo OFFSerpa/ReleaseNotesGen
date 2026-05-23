@@ -12,23 +12,17 @@ final class TokenManager {
     static let shared = TokenManager()
     private init() {}
 
-    private let service = "com.example.ReleaseNotesGen"
+    private let service = "br.com.viniciuspansan.ReleaseNotesGen"
     private let tokenAccount = "github_token"
-    private let tokenFallbackKey = "github_token_fallback"
     private let repoKey = "github_repo"
 
     var token: String? {
-        get {
-            // Keychain é a fonte primária; UserDefaults como fallback se o diálogo for negado
-            readKeychain(account: tokenAccount) ?? UserDefaults.standard.string(forKey: tokenFallbackKey)
-        }
+        get { readKeychain(account: tokenAccount) }
         set {
             if let newValue {
                 saveKeychain(account: tokenAccount, value: newValue)
-                UserDefaults.standard.set(newValue, forKey: tokenFallbackKey)
             } else {
                 deleteKeychain(account: tokenAccount)
-                UserDefaults.standard.removeObject(forKey: tokenFallbackKey)
             }
         }
     }
@@ -54,7 +48,8 @@ final class TokenManager {
             kSecAttrService as String: service,
             kSecAttrAccount as String: account,
             kSecValueData as String: data,
-            kSecAttrAccessible as String: kSecAttrAccessibleAfterFirstUnlock
+            kSecAttrAccessible as String: kSecAttrAccessibleAfterFirstUnlock,
+            kSecUseDataProtectionKeychain as String: true
         ]
         SecItemAdd(query as CFDictionary, nil)
     }
@@ -65,7 +60,8 @@ final class TokenManager {
             kSecAttrService as String: service,
             kSecAttrAccount as String: account,
             kSecReturnData as String: true,
-            kSecMatchLimit as String: kSecMatchLimitOne
+            kSecMatchLimit as String: kSecMatchLimitOne,
+            kSecUseDataProtectionKeychain as String: true
         ]
         var result: AnyObject?
         let status = SecItemCopyMatching(query as CFDictionary, &result)
@@ -77,7 +73,8 @@ final class TokenManager {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrService as String: service,
-            kSecAttrAccount as String: account
+            kSecAttrAccount as String: account,
+            kSecUseDataProtectionKeychain as String: true
         ]
         SecItemDelete(query as CFDictionary)
     }
