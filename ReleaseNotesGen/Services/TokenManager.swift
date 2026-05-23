@@ -14,15 +14,21 @@ final class TokenManager {
 
     private let service = "com.example.ReleaseNotesGen"
     private let tokenAccount = "github_token"
+    private let tokenFallbackKey = "github_token_fallback"
     private let repoKey = "github_repo"
 
     var token: String? {
-        get { readKeychain(account: tokenAccount) }
+        get {
+            // Keychain é a fonte primária; UserDefaults como fallback se o diálogo for negado
+            readKeychain(account: tokenAccount) ?? UserDefaults.standard.string(forKey: tokenFallbackKey)
+        }
         set {
             if let newValue {
                 saveKeychain(account: tokenAccount, value: newValue)
+                UserDefaults.standard.set(newValue, forKey: tokenFallbackKey)
             } else {
                 deleteKeychain(account: tokenAccount)
+                UserDefaults.standard.removeObject(forKey: tokenFallbackKey)
             }
         }
     }
@@ -47,7 +53,8 @@ final class TokenManager {
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrService as String: service,
             kSecAttrAccount as String: account,
-            kSecValueData as String: data
+            kSecValueData as String: data,
+            kSecAttrAccessible as String: kSecAttrAccessibleAfterFirstUnlock
         ]
         SecItemAdd(query as CFDictionary, nil)
     }
