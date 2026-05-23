@@ -7,14 +7,9 @@ A native macOS app that connects to the GitHub API, compares commits between two
 ![License](https://img.shields.io/github/license/OFFSerpa/ReleaseNotesGen?style=flat-square)
 
 ---
+![Setup Screen](https://github.com/user-attachments/assets/63879add-4ea9-4729-b69b-2c31de62fbfe)
 
-<!-- 
-  SCREENSHOT: tela inicial do app (SetupView) com os campos de token e repositório
-  Sugestão: 700x500, janela centralizada, light mode
--->
-![Setup Screen](./docs/screenshot-setup.png)
-
----
+--- 
 
 ## Features
 
@@ -34,7 +29,7 @@ A native macOS app that connects to the GitHub API, compares commits between two
   SCREENSHOT ou GIF: tela principal (MainView) com tags selecionadas e release notes geradas
   Ideal: GIF mostrando o fluxo completo — selecionar tags → clicar Generate → resultado aparecer
 -->
-![Main Screen](./docs/screenshot-main.png)
+![Main Screen](https://github.com/user-attachments/assets/bf0cdad4-4145-4adf-80e2-125c1b1578d0)
 
 ---
 
@@ -42,7 +37,7 @@ A native macOS app that connects to the GitHub API, compares commits between two
   SCREENSHOT: aba Preview com o markdown renderizado
   Sugestão: mesmo conteúdo do screenshot anterior, mas na aba "Preview"
 -->
-![Preview Screen](./docs/screenshot-preview.png)
+![Preview Screen](https://github.com/user-attachments/assets/ce7a293f-ee1e-421f-9611-16e97f271968)
 
 ---
 
