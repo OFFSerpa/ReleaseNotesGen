@@ -27,3 +27,7 @@ struct ReleaseNoteResultView: View {
         )
     }
 }
+
+#Preview {
+    ReleaseNoteResultView(markdown: "Test")
+}
