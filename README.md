@@ -8,8 +8,13 @@ A native macOS app that connects to the GitHub API, compares commits between two
 
 ---
 
-<!-- Add a screenshot or GIF here after recording the app in action -->
-<!-- ![ReleaseNotesGen demo](./docs/demo.gif) -->
+<!-- 
+  SCREENSHOT: tela inicial do app (SetupView) com os campos de token e repositório
+  Sugestão: 700x500, janela centralizada, light mode
+-->
+![Setup Screen](./docs/screenshot-setup.png)
+
+---
 
 ## Features
 
@@ -17,9 +22,29 @@ A native macOS app that connects to the GitHub API, compares commits between two
 - **Tag comparison** — select any two tags and compare the commits between them
 - **Automatic categorization** — parses conventional commits (`feat`, `fix`, `chore`, `refactor`, `docs`) into sections
 - **Markdown output** — generates clean, ready-to-paste release notes
+- **Raw / Preview toggle** — switch between raw Markdown and a rendered preview
 - **Copy to clipboard** — one click to copy the full output
 - **Export as `.md`** — save the file locally
 - **Secure token storage** — GitHub token stored in the macOS Keychain, never in plain text
+- **Persistent session** — change repositories without re-entering your token
+
+---
+
+<!-- 
+  SCREENSHOT ou GIF: tela principal (MainView) com tags selecionadas e release notes geradas
+  Ideal: GIF mostrando o fluxo completo — selecionar tags → clicar Generate → resultado aparecer
+-->
+![Main Screen](./docs/screenshot-main.png)
+
+---
+
+<!-- 
+  SCREENSHOT: aba Preview com o markdown renderizado
+  Sugestão: mesmo conteúdo do screenshot anterior, mas na aba "Preview"
+-->
+![Preview Screen](./docs/screenshot-preview.png)
+
+---
 
 ## Requirements
 
@@ -49,7 +74,7 @@ A native macOS app that connects to the GitHub API, compares commits between two
 2. Select the **From** and **To** tags
 3. Click **Generate** — the app fetches the commit diff via the GitHub REST API
 4. Commits are categorized by their conventional commit prefix
-5. Copy or export the generated Markdown
+5. Toggle between **Raw** and **Preview**, then copy or export
 
 ### Output format
 
@@ -74,7 +99,7 @@ ReleaseNotesGen/
 ├── Models/         → Repository, Tag, Commit, ReleaseNote
 ├── Services/       → GitHubService (API), TokenManager (Keychain)
 ├── ViewModels/     → SetupViewModel, ReleaseNoteViewModel
-├── Views/          → SetupView, MainView, ReleaseNoteResultView
+├── Views/          → SetupView, MainView, ReleaseNoteResultView, MarkdownPreviewView
 └── Utils/          → CommitParser
 ```
 
