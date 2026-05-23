@@ -41,7 +41,17 @@ final class SetupViewModel: ObservableObject {
         isValidating = false
     }
 
-    func reset() {
+    var hasExistingToken: Bool {
+        !(TokenManager.shared.token ?? "").isEmpty
+    }
+
+    func changeRepository() {
+        TokenManager.shared.repository = nil
+        repository = ""
+        isConfigured = false
+    }
+
+    func signOut() {
         TokenManager.shared.token = nil
         TokenManager.shared.repository = nil
         token = ""

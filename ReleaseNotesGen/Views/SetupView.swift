@@ -21,25 +21,37 @@ struct SetupView: View {
                 Text("ReleaseNotesGen")
                     .font(.largeTitle)
                     .fontWeight(.bold)
-                Text("Connect to GitHub to get started")
+                Text(viewModel.hasExistingToken ? "Enter the repository to connect" : "Connect to GitHub to get started")
                     .foregroundColor(.secondary)
             }
 
             VStack(alignment: .leading, spacing: 14) {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("GitHub Personal Access Token")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                    SecureField("ghp_xxxxxxxxxxxxxxxxxxxx", text: $viewModel.token)
-                        .textFieldStyle(.roundedBorder)
-                }
+                if viewModel.hasExistingToken {
+                    // Token já existe — só mostra o repo
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Repository")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                        TextField("owner/repo", text: $viewModel.repository)
+                            .textFieldStyle(.roundedBorder)
+                    }
+                } else {
+                    // Fluxo completo: token + repo
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("GitHub Personal Access Token")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                        SecureField("ghp_xxxxxxxxxxxxxxxxxxxx", text: $viewModel.token)
+                            .textFieldStyle(.roundedBorder)
+                    }
 
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Repository")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                    TextField("owner/repo", text: $viewModel.repository)
-                        .textFieldStyle(.roundedBorder)
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Repository")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                        TextField("owner/repo", text: $viewModel.repository)
+                            .textFieldStyle(.roundedBorder)
+                    }
                 }
             }
             .frame(maxWidth: 400)
@@ -61,12 +73,23 @@ struct SetupView: View {
                 }
             }
             .buttonStyle(.borderedProminent)
-            .disabled(viewModel.isValidating || viewModel.token.isEmpty || viewModel.repository.isEmpty)
+            .disabled(viewModel.isValidating || viewModel.repository.isEmpty || (!viewModel.hasExistingToken && viewModel.token.isEmpty))
             .keyboardShortcut(.defaultAction)
+
+            if viewModel.hasExistingToken {
+                Button("Sign out") { viewModel.signOut() }
+                    .buttonStyle(.borderless)
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
 
             Spacer()
         }
         .padding()
         .frame(width: 700, height: 500)
     }
+}
+
+#Preview {
+    SetupView(viewModel: .init())
 }

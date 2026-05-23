@@ -39,7 +39,7 @@ struct MainView: View {
             Text(TokenManager.shared.repository ?? "")
                 .font(.caption)
                 .foregroundColor(.secondary)
-            Button("Disconnect") { setupViewModel.reset() }
+            Button("Change Repo") { setupViewModel.changeRepository() }
                 .buttonStyle(.borderless)
                 .font(.caption)
                 .foregroundColor(.secondary)
