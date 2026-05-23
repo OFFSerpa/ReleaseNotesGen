@@ -12,7 +12,9 @@ struct MarkdownPreviewView: NSViewRepresentable {
     let markdown: String
 
     func makeNSView(context: Context) -> WKWebView {
-        let webView = WKWebView()
+        let config = WKWebViewConfiguration()
+        config.defaultWebpagePreferences.allowsContentJavaScript = false
+        let webView = WKWebView(frame: .zero, configuration: config)
         webView.setValue(false, forKey: "drawsBackground")
         return webView
     }
