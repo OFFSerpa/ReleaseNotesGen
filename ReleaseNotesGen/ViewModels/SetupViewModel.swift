@@ -29,6 +29,10 @@ final class SetupViewModel: ObservableObject {
     func validate() async {
         guard !token.isEmpty else { validationError = "Token is required"; return }
         guard !repository.isEmpty else { validationError = "Repository is required (format: owner/repo)"; return }
+
+        // Normalize URL → owner/repo
+        repository = Self.extractOwnerRepo(from: repository)
+
         guard repository.contains("/") else { validationError = "Repository format must be owner/repo"; return }
 
         isValidating = true
@@ -60,6 +64,22 @@ final class SetupViewModel: ObservableObject {
         TokenManager.shared.repository = nil
         repository = ""
         isConfigured = false
+    }
+
+    /// Extracts "owner/repo" from a full URL or returns the input unchanged.
+    /// Supports: https://github.com/owner/repo, https://github.com/owner/repo.git
+    static func extractOwnerRepo(from input: String) -> String {
+        var text = input.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard text.lowercased().hasPrefix("http"),
+              let url = URL(string: text) else { return text }
+
+        let components = url.pathComponents.filter { $0 != "/" }
+        guard components.count >= 2 else { return text }
+
+        let owner = components[0]
+        var repo = components[1]
+        if repo.hasSuffix(".git") { repo = String(repo.dropLast(4)) }
+        return "\(owner)/\(repo)"
     }
 
     func signOut() {
