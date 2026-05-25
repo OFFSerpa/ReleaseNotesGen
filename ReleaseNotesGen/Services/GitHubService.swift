@@ -42,6 +42,23 @@ final class GitHubService {
         return request
     }
 
+    // MARK: - URL Helpers
+
+    private func encoded(_ component: String) -> String {
+        var allowed = CharacterSet.urlPathAllowed
+        allowed.remove(charactersIn: "/")
+        return component.addingPercentEncoding(withAllowedCharacters: allowed) ?? component
+    }
+
+    private func repoURL(_ owner: String, _ repo: String, path: String, query: String? = nil) throws -> URL {
+        var urlString = "\(baseURL)/repos/\(encoded(owner))/\(encoded(repo))\(path)"
+        if let query { urlString += "?\(query)" }
+        guard let url = URL(string: urlString) else { throw GitHubError.invalidURL }
+        return url
+    }
+
+    // MARK: - API
+
     func validateToken() async throws -> Bool {
         guard let url = URL(string: "\(baseURL)/user") else { throw GitHubError.invalidURL }
         let (_, response) = try await URLSession.shared.data(for: makeRequest(url: url))
@@ -51,9 +68,7 @@ final class GitHubService {
     }
 
     func fetchTags(owner: String, repo: String) async throws -> [Tag] {
-        guard let url = URL(string: "\(baseURL)/repos/\(owner)/\(repo)/tags?per_page=100") else {
-            throw GitHubError.invalidURL
-        }
+        let url = try repoURL(owner, repo, path: "/tags", query: "per_page=100")
         let (data, response) = try await URLSession.shared.data(for: makeRequest(url: url))
         guard let http = response as? HTTPURLResponse else { throw GitHubError.invalidURL }
         switch http.statusCode {
@@ -69,8 +84,11 @@ final class GitHubService {
     }
 
     func compareCommits(owner: String, repo: String, base: String, head: String) async throws -> [Commit] {
-        let path = "\(baseURL)/repos/\(owner)/\(repo)/compare/\(base)...\(head)?per_page=250"
-        guard let url = URL(string: path) else { throw GitHubError.invalidURL }
+        let url = try repoURL(
+            owner, repo,
+            path: "/compare/\(encoded(base))...\(encoded(head))",
+            query: "per_page=250"
+        )
         let (data, response) = try await URLSession.shared.data(for: makeRequest(url: url))
         guard let http = response as? HTTPURLResponse else { throw GitHubError.invalidURL }
         switch http.statusCode {
