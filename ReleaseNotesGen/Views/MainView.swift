@@ -27,6 +27,7 @@ struct MainView: View {
             content.padding()
         }
         .frame(width: 700, height: 500)
+        .navigationTitle(TokenManager.shared.repository ?? "ReleaseNotesGen")
         .onAppear { viewModel.setup() }
     }
 
