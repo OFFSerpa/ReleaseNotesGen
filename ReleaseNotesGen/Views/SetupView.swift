@@ -9,6 +9,7 @@ import SwiftUI
 
 struct SetupView: View {
     @ObservedObject var viewModel: SetupViewModel
+    @State private var showSignOutConfirmation = false
 
     var body: some View {
         VStack(spacing: 28) {
@@ -77,7 +78,7 @@ struct SetupView: View {
             .keyboardShortcut(.defaultAction)
 
             if viewModel.hasExistingToken {
-                Button("Sign out") { viewModel.signOut() }
+                Button("Sign out") { showSignOutConfirmation = true }
                     .buttonStyle(.borderless)
                     .font(.caption)
                     .foregroundColor(.secondary)
@@ -87,6 +88,12 @@ struct SetupView: View {
         }
         .padding()
         .frame(width: 700, height: 500)
+        .alert("Sign Out?", isPresented: $showSignOutConfirmation) {
+            Button("Sign Out", role: .destructive) { viewModel.signOut() }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("Your GitHub token will be removed. You'll need to enter it again to reconnect.")
+        }
     }
 }
 
