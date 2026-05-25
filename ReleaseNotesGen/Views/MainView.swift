@@ -19,6 +19,7 @@ struct MainView: View {
     @ObservedObject var setupViewModel: SetupViewModel
     @State private var outputTab: OutputTab = .raw
     @State private var didCopy = false
+    @State private var tagFilter = ""
 
     var body: some View {
         VStack(spacing: 0) {
@@ -75,14 +76,34 @@ struct MainView: View {
         }
     }
 
+    private var filteredTags: [Tag] {
+        if tagFilter.isEmpty { return viewModel.tags }
+        return viewModel.tags.filter { $0.name.localizedCaseInsensitiveContains(tagFilter) }
+    }
+
     private var tagSelectorRow: some View {
-        HStack(spacing: 12) {
-            tagPicker(label: "From tag", selection: $viewModel.fromTag)
-            Image(systemName: "arrow.right")
-                .foregroundColor(.secondary)
-                .padding(.top, 18)
-            tagPicker(label: "To tag", selection: $viewModel.toTag)
-            generateButton.padding(.top, 18)
+        VStack(spacing: 8) {
+            if viewModel.tags.count > 5 {
+                HStack(spacing: 4) {
+                    Image(systemName: "magnifyingglass")
+                        .foregroundColor(.secondary)
+                        .font(.caption)
+                    TextField("Filter tags...", text: $tagFilter)
+                        .textFieldStyle(.plain)
+                        .font(.caption)
+                }
+                .padding(6)
+                .background(Color(NSColor.controlBackgroundColor))
+                .cornerRadius(6)
+            }
+            HStack(spacing: 12) {
+                tagPicker(label: "From tag", selection: $viewModel.fromTag)
+                Image(systemName: "arrow.right")
+                    .foregroundColor(.secondary)
+                    .padding(.top, 18)
+                tagPicker(label: "To tag", selection: $viewModel.toTag)
+                generateButton.padding(.top, 18)
+            }
         }
     }
 
@@ -91,7 +112,7 @@ struct MainView: View {
             Text(label).font(.caption).foregroundColor(.secondary)
             Picker(label, selection: selection) {
                 Text("Select…").tag(Tag?.none)
-                ForEach(viewModel.tags) { tag in
+                ForEach(filteredTags) { tag in
                     Text(tag.name).tag(tag as Tag?)
                 }
             }
