@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		000000020000000000000001 /* ReleaseNotesGenApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000010000000000000001 /* ReleaseNotesGenApp.swift */; };
+		000000020000000000000016 /* CommitParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000010000000000000016 /* CommitParserTests.swift */; };
 000000020000000000000003 /* Tag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000010000000000000003 /* Tag.swift */; };
 		000000020000000000000004 /* Commit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000010000000000000004 /* Commit.swift */; };
 		000000020000000000000005 /* ReleaseNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000010000000000000005 /* ReleaseNote.swift */; };
@@ -39,10 +40,19 @@
 		000000010000000000000013 /* CommitParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommitParser.swift; sourceTree = "<group>"; };
 		000000010000000000000014 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		000000010000000000000015 /* MarkdownPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownPreviewView.swift; sourceTree = "<group>"; };
+		000000010000000000000016 /* CommitParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommitParserTests.swift; sourceTree = "<group>"; };
+		000000010000000000000017 /* ReleaseNotesGenTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ReleaseNotesGenTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		000000000000000000000015 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		000000000000000000000023 /* Frameworks (Tests) */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -56,8 +66,17 @@
 			isa = PBXGroup;
 			children = (
 				000000000000000000000003 /* ReleaseNotesGen */,
+				000000000000000000000022 /* ReleaseNotesGenTests */,
 				000000000000000000000004 /* Products */,
 			);
+			sourceTree = "<group>";
+		};
+		000000000000000000000022 /* ReleaseNotesGenTests */ = {
+			isa = PBXGroup;
+			children = (
+				000000010000000000000016 /* CommitParserTests.swift */,
+			);
+			path = ReleaseNotesGenTests;
 			sourceTree = "<group>";
 		};
 		000000000000000000000003 /* ReleaseNotesGen */ = {
@@ -78,6 +97,7 @@
 			isa = PBXGroup;
 			children = (
 				000000000000000000000012 /* ReleaseNotesGen.app */,
+				000000010000000000000017 /* ReleaseNotesGenTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -157,6 +177,23 @@
 			productReference = 000000000000000000000012 /* ReleaseNotesGen.app */;
 			productType = "com.apple.product-type.application";
 		};
+		000000000000000000000025 /* ReleaseNotesGenTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 000000000000000000000030 /* Build configuration list for PBXNativeTarget "ReleaseNotesGenTests" */;
+			buildPhases = (
+				000000000000000000000024 /* Sources */,
+				000000000000000000000023 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				000000000000000000000027 /* PBXTargetDependency */,
+			);
+			name = ReleaseNotesGenTests;
+			productName = ReleaseNotesGenTests;
+			productReference = 000000010000000000000017 /* ReleaseNotesGenTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -169,6 +206,10 @@
 				TargetAttributes = {
 					000000000000000000000011 = {
 						CreatedOnToolsVersion = 15.0;
+					};
+					000000000000000000000025 = {
+						CreatedOnToolsVersion = 15.0;
+						TestTargetID = 000000000000000000000011;
 					};
 				};
 			};
@@ -186,6 +227,7 @@
 			projectRoot = "";
 			targets = (
 				000000000000000000000011 /* ReleaseNotesGen */,
+				000000000000000000000025 /* ReleaseNotesGenTests */,
 			);
 		};
 /* End PBXProject section */
@@ -200,6 +242,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXContainerItemProxy section */
+		000000000000000000000026 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 000000000000000000000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 000000000000000000000011;
+			remoteInfo = ReleaseNotesGen;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXTargetDependency section */
+		000000000000000000000027 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 000000000000000000000011 /* ReleaseNotesGen */;
+			targetProxy = 000000000000000000000026 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXSourcesBuildPhase section */
 		000000000000000000000013 /* Sources */ = {
@@ -219,6 +279,14 @@
 				000000020000000000000011 /* MainView.swift in Sources */,
 				000000020000000000000012 /* ReleaseNoteResultView.swift in Sources */,
 				000000020000000000000013 /* CommitParser.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		000000000000000000000024 /* Sources (Tests) */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				000000020000000000000016 /* CommitParserTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -392,6 +460,38 @@
 			};
 			name = Release;
 		};
+		000000000000000000000028 /* Debug (Tests) */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = br.com.viniciuspansan.ReleaseNotesGenTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.9;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ReleaseNotesGen.app/Contents/MacOS/ReleaseNotesGen";
+			};
+			name = Debug;
+		};
+		000000000000000000000029 /* Release (Tests) */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = br.com.viniciuspansan.ReleaseNotesGenTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.9;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ReleaseNotesGen.app/Contents/MacOS/ReleaseNotesGen";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -409,6 +509,15 @@
 			buildConfigurations = (
 				000000000000000000000020 /* Debug */,
 				000000000000000000000021 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		000000000000000000000030 /* Build configuration list for PBXNativeTarget "ReleaseNotesGenTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				000000000000000000000028 /* Debug */,
+				000000000000000000000029 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
