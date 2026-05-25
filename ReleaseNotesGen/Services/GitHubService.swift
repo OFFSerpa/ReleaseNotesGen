@@ -28,11 +28,12 @@ enum GitHubError: LocalizedError {
 }
 
 final class GitHubService {
-    private let baseURL = "https://api.github.com"
+    private let baseURL: String
     private let token: String
 
-    init(token: String) {
+    init(token: String, baseURL: String = "https://api.github.com") {
         self.token = token
+        self.baseURL = baseURL
     }
 
     private func makeRequest(url: URL) -> URLRequest {

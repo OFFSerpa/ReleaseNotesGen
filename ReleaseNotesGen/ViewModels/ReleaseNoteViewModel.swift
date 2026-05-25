@@ -36,7 +36,7 @@ final class ReleaseNoteViewModel: ObservableObject {
 
         owner = String(parts[0])
         repo = String(parts[1])
-        service = GitHubService(token: tokenStr)
+        service = GitHubService(token: tokenStr, baseURL: TokenManager.shared.apiBaseURL)
 
         Task { await loadTags() }
     }

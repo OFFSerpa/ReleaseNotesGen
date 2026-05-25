@@ -15,6 +15,7 @@ final class TokenManager {
     private let service = "br.com.viniciuspansan.ReleaseNotesGen"
     private let tokenAccount = "github_token"
     private let repoKey = "github_repo"
+    private let serverURLKey = "github_server_url"
 
     var token: String? {
         get { readKeychain(account: tokenAccount) }
@@ -30,6 +31,26 @@ final class TokenManager {
     var repository: String? {
         get { UserDefaults.standard.string(forKey: repoKey) }
         set { UserDefaults.standard.set(newValue, forKey: repoKey) }
+    }
+
+    /// Custom GitHub Enterprise URL (nil = github.com)
+    var serverURL: String? {
+        get { UserDefaults.standard.string(forKey: serverURLKey) }
+        set { UserDefaults.standard.set(newValue, forKey: serverURLKey) }
+    }
+
+    /// Resolved API base URL from stored config
+    var apiBaseURL: String {
+        resolveBaseURL(from: serverURL)
+    }
+
+    /// Resolves the API base URL from an optional enterprise URL
+    func resolveBaseURL(from enterpriseURL: String?) -> String {
+        if let server = enterpriseURL, !server.isEmpty {
+            let trimmed = server.trimmingCharacters(in: CharacterSet(charactersIn: "/"))
+            return "\(trimmed)/api/v3"
+        }
+        return "https://api.github.com"
     }
 
     var isConfigured: Bool {

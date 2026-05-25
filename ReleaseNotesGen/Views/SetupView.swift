@@ -38,8 +38,22 @@ struct SetupView: View {
                     }
                 } else {
                     // Fluxo completo: token + repo
+                    Toggle("GitHub Enterprise", isOn: $viewModel.isEnterprise)
+                        .toggleStyle(.switch)
+                        .font(.caption)
+
+                    if viewModel.isEnterprise {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("Server URL")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                            TextField("https://github.company.com", text: $viewModel.serverURL)
+                                .textFieldStyle(.roundedBorder)
+                        }
+                    }
+
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("GitHub Personal Access Token")
+                        Text("Personal Access Token")
                             .font(.caption)
                             .foregroundColor(.secondary)
                         SecureField("ghp_xxxxxxxxxxxxxxxxxxxx", text: $viewModel.token)

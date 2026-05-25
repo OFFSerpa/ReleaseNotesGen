@@ -11,6 +11,8 @@ import Foundation
 final class SetupViewModel: ObservableObject {
     @Published var token: String = ""
     @Published var repository: String = ""
+    @Published var isEnterprise = false
+    @Published var serverURL: String = ""
     @Published var isValidating = false
     @Published var validationError: String?
     @Published var isConfigured = false
@@ -18,6 +20,9 @@ final class SetupViewModel: ObservableObject {
     init() {
         token = TokenManager.shared.token ?? ""
         repository = TokenManager.shared.repository ?? ""
+        let savedURL = TokenManager.shared.serverURL ?? ""
+        serverURL = savedURL
+        isEnterprise = !savedURL.isEmpty
         isConfigured = TokenManager.shared.isConfigured
     }
 
@@ -30,9 +35,15 @@ final class SetupViewModel: ObservableObject {
         validationError = nil
 
         do {
-            _ = try await GitHubService(token: token).validateToken()
+            let enterpriseURL = isEnterprise ? serverURL : nil
+            if isEnterprise {
+                guard !serverURL.isEmpty else { validationError = "Server URL is required"; isValidating = false; return }
+            }
+            let baseURL = TokenManager.shared.resolveBaseURL(from: enterpriseURL)
+            _ = try await GitHubService(token: token, baseURL: baseURL).validateToken()
             TokenManager.shared.token = token
             TokenManager.shared.repository = repository
+            TokenManager.shared.serverURL = enterpriseURL
             isConfigured = true
         } catch {
             validationError = error.localizedDescription
@@ -54,8 +65,11 @@ final class SetupViewModel: ObservableObject {
     func signOut() {
         TokenManager.shared.token = nil
         TokenManager.shared.repository = nil
+        TokenManager.shared.serverURL = nil
         token = ""
         repository = ""
+        serverURL = ""
+        isEnterprise = false
         isConfigured = false
     }
 }
