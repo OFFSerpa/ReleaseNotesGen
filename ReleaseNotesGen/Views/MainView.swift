@@ -18,6 +18,7 @@ struct MainView: View {
     @StateObject private var viewModel = ReleaseNoteViewModel()
     @ObservedObject var setupViewModel: SetupViewModel
     @State private var outputTab: OutputTab = .raw
+    @State private var didCopy = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -138,8 +139,9 @@ struct MainView: View {
         HStack {
             Spacer()
             Button { copyToClipboard(markdown) } label: {
-                Label("Copy", systemImage: "doc.on.doc")
+                Label(didCopy ? "Copied!" : "Copy", systemImage: didCopy ? "checkmark" : "doc.on.doc")
             }
+            .disabled(didCopy)
             Button { exportAsMarkdown(markdown) } label: {
                 Label("Export .md", systemImage: "arrow.down.doc")
             }
@@ -171,6 +173,10 @@ struct MainView: View {
     private func copyToClipboard(_ text: String) {
         NSPasteboard.general.clearContents()
         NSPasteboard.general.setString(text, forType: .string)
+        didCopy = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+            didCopy = false
+        }
     }
 
     private func exportAsMarkdown(_ text: String) {
