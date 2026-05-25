@@ -53,10 +53,16 @@ struct MainView: View {
         VStack(spacing: 12) {
             tagSelectorRow
 
+            if viewModel.hasSameTagSelected {
+                sameTagWarning
+            }
+
             if viewModel.isLoadingTags {
                 loadingView("Loading tags...")
             } else if let error = viewModel.errorMessage {
                 errorView(error)
+            } else if let info = viewModel.infoMessage {
+                infoView(info)
             } else if let markdown = viewModel.generatedMarkdown {
                 outputToggle
                 outputContent(markdown: markdown)
@@ -103,7 +109,13 @@ struct MainView: View {
             }
         }
         .buttonStyle(.borderedProminent)
-        .disabled(viewModel.isGenerating || viewModel.fromTag == nil || viewModel.toTag == nil)
+        .disabled(viewModel.isGenerating || viewModel.fromTag == nil || viewModel.toTag == nil || viewModel.hasSameTagSelected)
+    }
+
+    private var sameTagWarning: some View {
+        Label("\"From\" and \"To\" tags must be different.", systemImage: "exclamationmark.triangle.fill")
+            .font(.caption)
+            .foregroundColor(.orange)
     }
 
     private var outputToggle: some View {
@@ -144,6 +156,14 @@ struct MainView: View {
                 Label("Export .md", systemImage: "arrow.down.doc")
             }
         }
+    }
+
+    private func infoView(_ message: String) -> some View {
+        VStack(spacing: 8) {
+            Image(systemName: "tray").font(.title).foregroundColor(.secondary)
+            Text(message).foregroundColor(.secondary).multilineTextAlignment(.center)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 
     private func loadingView(_ message: String) -> some View {
