@@ -15,6 +15,7 @@ struct ReleaseNote {
     let categorizedCommits: [CommitCategory: [Commit]]
 
     enum CommitCategory: String, CaseIterable {
+        case mergedPRs = "Pull Requests"
         case features = "Features"
         case bugFixes = "Bug Fixes"
         case performance = "Performance"
