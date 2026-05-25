@@ -17,7 +17,9 @@ struct ReleaseNote {
     enum CommitCategory: String, CaseIterable {
         case features = "Features"
         case bugFixes = "Bug Fixes"
+        case performance = "Performance"
         case refactors = "Refactors"
+        case tests = "Tests"
         case chores = "Chores"
         case documentation = "Documentation"
         case other = "Other"

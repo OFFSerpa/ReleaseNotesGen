@@ -12,17 +12,27 @@ struct CommitParser {
         var result: [ReleaseNote.CommitCategory: [Commit]] = [:]
         for commit in commits {
             let firstLine = commit.commit.message.components(separatedBy: "\n").first ?? commit.commit.message
+            guard !isMergeCommit(firstLine) else { continue }
             result[detectCategory(from: firstLine), default: []].append(commit)
         }
         return result
+    }
+
+    private static func isMergeCommit(_ message: String) -> Bool {
+        let lower = message.lowercased()
+        return lower.hasPrefix("merge pull request")
+            || lower.hasPrefix("merge branch")
+            || lower.hasPrefix("merge remote-tracking")
     }
 
     private static func detectCategory(from message: String) -> ReleaseNote.CommitCategory {
         let lower = message.lowercased()
         if lower.hasPrefix("feat:") || lower.hasPrefix("feat(") { return .features }
         if lower.hasPrefix("fix:") || lower.hasPrefix("fix(") { return .bugFixes }
-        if lower.hasPrefix("chore:") || lower.hasPrefix("chore(") { return .chores }
+        if lower.hasPrefix("perf:") || lower.hasPrefix("perf(") { return .performance }
         if lower.hasPrefix("refactor:") || lower.hasPrefix("refactor(") { return .refactors }
+        if lower.hasPrefix("test:") || lower.hasPrefix("test(") || lower.hasPrefix("tests:") { return .tests }
+        if lower.hasPrefix("chore:") || lower.hasPrefix("chore(") { return .chores }
         if lower.hasPrefix("docs:") || lower.hasPrefix("docs(") { return .documentation }
         return .other
     }
