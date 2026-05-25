@@ -16,6 +16,12 @@ final class ReleaseNoteViewModel: ObservableObject {
     @Published var isGenerating = false
     @Published var errorMessage: String?
     @Published var generatedMarkdown: String?
+    @Published var infoMessage: String?
+
+    var hasSameTagSelected: Bool {
+        guard let from = fromTag, let to = toTag else { return false }
+        return from.id == to.id
+    }
 
     private var owner = ""
     private var repo = ""
@@ -42,7 +48,9 @@ final class ReleaseNoteViewModel: ObservableObject {
 
         do {
             tags = try await service.fetchTags(owner: owner, repo: repo)
-            if tags.count >= 2 {
+            if tags.isEmpty {
+                errorMessage = "This repository has no tags yet."
+            } else if tags.count >= 2 {
                 toTag = tags[0]
                 fromTag = tags[1]
             }
@@ -59,18 +67,23 @@ final class ReleaseNoteViewModel: ObservableObject {
         isGenerating = true
         errorMessage = nil
         generatedMarkdown = nil
+        infoMessage = nil
 
         do {
             let commits = try await service.compareCommits(owner: owner, repo: repo, base: from.name, head: to.name)
-            let categorized = CommitParser.categorize(commits: commits)
-            let releaseNote = ReleaseNote(
-                fromTag: from.name,
-                toTag: to.name,
-                repository: "\(owner)/\(repo)",
-                generatedDate: Date(),
-                categorizedCommits: categorized
-            )
-            generatedMarkdown = CommitParser.generateMarkdown(from: releaseNote)
+            if commits.isEmpty {
+                infoMessage = "No commits found between \(from.name) and \(to.name)."
+            } else {
+                let categorized = CommitParser.categorize(commits: commits)
+                let releaseNote = ReleaseNote(
+                    fromTag: from.name,
+                    toTag: to.name,
+                    repository: "\(owner)/\(repo)",
+                    generatedDate: Date(),
+                    categorizedCommits: categorized
+                )
+                generatedMarkdown = CommitParser.generateMarkdown(from: releaseNote)
+            }
         } catch {
             errorMessage = error.localizedDescription
         }
