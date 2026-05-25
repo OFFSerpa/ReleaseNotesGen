@@ -8,8 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		000000020000000000000001 /* ReleaseNotesGenApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000010000000000000001 /* ReleaseNotesGenApp.swift */; };
-		000000020000000000000002 /* Repository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000010000000000000002 /* Repository.swift */; };
-		000000020000000000000003 /* Tag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000010000000000000003 /* Tag.swift */; };
+000000020000000000000003 /* Tag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000010000000000000003 /* Tag.swift */; };
 		000000020000000000000004 /* Commit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000010000000000000004 /* Commit.swift */; };
 		000000020000000000000005 /* ReleaseNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000010000000000000005 /* ReleaseNote.swift */; };
 		000000020000000000000006 /* GitHubService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000010000000000000006 /* GitHubService.swift */; };
@@ -27,8 +26,7 @@
 /* Begin PBXFileReference section */
 		000000000000000000000012 /* ReleaseNotesGen.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ReleaseNotesGen.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		000000010000000000000001 /* ReleaseNotesGenApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReleaseNotesGenApp.swift; sourceTree = "<group>"; };
-		000000010000000000000002 /* Repository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Repository.swift; sourceTree = "<group>"; };
-		000000010000000000000003 /* Tag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tag.swift; sourceTree = "<group>"; };
+000000010000000000000003 /* Tag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tag.swift; sourceTree = "<group>"; };
 		000000010000000000000004 /* Commit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Commit.swift; sourceTree = "<group>"; };
 		000000010000000000000005 /* ReleaseNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReleaseNote.swift; sourceTree = "<group>"; };
 		000000010000000000000006 /* GitHubService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitHubService.swift; sourceTree = "<group>"; };
@@ -95,8 +93,7 @@
 		000000000000000000000006 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				000000010000000000000002 /* Repository.swift */,
-				000000010000000000000003 /* Tag.swift */,
+000000010000000000000003 /* Tag.swift */,
 				000000010000000000000004 /* Commit.swift */,
 				000000010000000000000005 /* ReleaseNote.swift */,
 			);
@@ -211,8 +208,7 @@
 			files = (
 				000000020000000000000015 /* MarkdownPreviewView.swift in Sources */,
 				000000020000000000000001 /* ReleaseNotesGenApp.swift in Sources */,
-				000000020000000000000002 /* Repository.swift in Sources */,
-				000000020000000000000003 /* Tag.swift in Sources */,
+000000020000000000000003 /* Tag.swift in Sources */,
 				000000020000000000000004 /* Commit.swift in Sources */,
 				000000020000000000000005 /* ReleaseNote.swift in Sources */,
 				000000020000000000000006 /* GitHubService.swift in Sources */,
