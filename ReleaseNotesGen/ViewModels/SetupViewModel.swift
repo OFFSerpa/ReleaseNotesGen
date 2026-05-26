@@ -82,6 +82,53 @@ final class SetupViewModel: ObservableObject {
         return "\(owner)/\(repo)"
     }
 
+    // MARK: - GitHub CLI Integration
+
+    func importTokenFromCLI() {
+        validationError = nil
+
+        let process = Process()
+        process.executableURL = URL(fileURLWithPath: "/bin/zsh")
+
+        let hostname: String? = {
+            guard isEnterprise, !serverURL.isEmpty,
+                  let url = URL(string: serverURL),
+                  let host = url.host else { return nil }
+            return host
+        }()
+
+        let command = hostname != nil
+            ? "gh auth token --hostname \(hostname!)"
+            : "gh auth token"
+        process.arguments = ["-l", "-c", command]
+
+        let pipe = Pipe()
+        process.standardOutput = pipe
+        process.standardError = Pipe()
+
+        do {
+            try process.run()
+            process.waitUntilExit()
+
+            guard process.terminationStatus == 0 else {
+                validationError = hostname != nil
+                    ? "Not authenticated. Run: gh auth login --hostname \(hostname!)"
+                    : "Not authenticated. Run: gh auth login"
+                return
+            }
+
+            let data = pipe.fileHandleForReading.readDataToEndOfFile()
+            if let output = String(data: data, encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines),
+               !output.isEmpty {
+                token = output
+            } else {
+                validationError = "No token returned from GitHub CLI."
+            }
+        } catch {
+            validationError = "GitHub CLI not found. Install it with: brew install gh"
+        }
+    }
+
     func signOut() {
         TokenManager.shared.token = nil
         TokenManager.shared.repository = nil

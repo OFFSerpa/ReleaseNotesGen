@@ -53,9 +53,18 @@ struct SetupView: View {
                     }
 
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("Personal Access Token")
+                        HStack {
+                            Text("Personal Access Token")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                            Spacer()
+                            Button("Import from GitHub CLI") {
+                                viewModel.importTokenFromCLI()
+                            }
+                            .buttonStyle(.borderless)
                             .font(.caption)
-                            .foregroundColor(.secondary)
+                            .foregroundColor(.accentColor)
+                        }
                         SecureField("ghp_xxxxxxxxxxxxxxxxxxxx", text: $viewModel.token)
                             .textFieldStyle(.roundedBorder)
                     }
